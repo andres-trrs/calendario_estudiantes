@@ -1,11 +1,68 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'styles/loginstyle.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>Login</title>
 </head>
 <body>
-    <h1>Esta será la pantalla de login</h1>
+    <header>
+        <div class="header-content">
+            <img src="{% static 'images/logo blanco.png' %}" alt="logo" class="logo">
+        </div>
+    </header>
+
+    <main class="flex-grow"> <!-- Asegúrate de que main tenga flex-grow -->
+        <section class="text-gray-600 body-font">
+            <div class="container px-5 py-24 mx-auto flex flex-wrap items-center">
+                <div class="lg:w-3/5 md:w-1/2 md:pr-16 lg:pr-0 pr-0">
+                    <h1 class="title-font font-medium text-3xl text-gray-900">Tus actividades organizadas, como nunca antes las has visto</h1>
+                    <p class="leading-relaxed mt-4">Regístrate y ten la experiencia de tener todas tus actividades y descansos organizados en un solo lugar!</p>
+                </div>
+                <div class="lg:w-2/6 md:w-1/2 bg-gray-100 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
+                    <h2 class="text-gray-900 text-lg font-medium title-font mb-5">Iniciar sesión</h2>
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <div class="relative mb-4">
+                            <label for="email" class="leading-7 text-sm text-gray-600">Email</label>
+                            <input type="email" id="email" name="correo" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required>
+                        </div>
+                        <div class="relative mb-4">
+                            <label for="contrasena" class="leading-7 text-sm text-gray-600">Contraseña</label>
+                            <input type="password" id="contrasena" name="contrasena" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" required>
+                        </div>
+                        <button type="submit" class="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Iniciar Sesión</button>
+                        
+                        {% if messages %}
+                            <div class="mt-4">
+                                {% for message in messages %}
+                                    <p class="text-red-500">{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </form>
+                    <p class="text-xs text-gray-500 mt-3">texto de ejemplo</p>
+                    <div class="extra-links">
+                        <a href="#">¿Olvidaste tu contraseña?</a>
+                        <span>|</span>
+                        <a href="#">Registrarse</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="d-flex flex-column">
+                <!-- Contenido del footer -->
+                <p>© 2024 Tu Empresa</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

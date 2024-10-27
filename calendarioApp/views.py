@@ -1,6 +1,15 @@
-from django.shortcuts import render
-
-# Create your views here.
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Usuario
 
 def login(request):
-    return render (request, 'login.html')
+    if request.method == 'POST':
+        correo = request.POST.get('correo')
+        contrasena = request.POST.get('contrasena')
+        try:
+            usuario = Usuario.objects.get(correo=correo, contrasena=contrasena)
+            # Acceso concedido, redirige a donde quieras
+            return redirect('home')  # Cambia 'home' por tu vista deseada
+        except Usuario.DoesNotExist:
+            messages.error(request, "Credenciales incorrectas")
+    return render(request, 'login.html')
