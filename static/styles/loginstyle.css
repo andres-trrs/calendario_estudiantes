@@ -1,34 +1,141 @@
-header {
-    background-color: #003366; 
-    padding: 10px 20px;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000; 
-    transition: top 0.3s; 
-}
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
-footer {
-    background-color: #003366;
-    padding: 20px 0;
-    color: #fff;
-    text-align: center;
-    width: 100%;
-}
-
-.logo {
-    height: 50px;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
 }
 
 body {
     display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("{% static 'images/fondo.png' %}");
+    background-size: cover;
+    background-position: center;
     flex-direction: column;
-    min-height: 100vh; /* Asegúrate de que el body ocupe toda la altura */
 }
 
-main {
-    flex-grow: 1; /* Esto hará que el main tome el espacio disponible */
-    padding-top: 60px; /* Agrega un espacio para el header fijo */
+.encabezado {
+    text-align: center;
+    margin-bottom: 50px
+    
 }
 
+.encabezado h1 {
+    color: #fff;
+    font-size: 4em;
+    margin-bottom: 10px;
+    text-shadow: 
+    -2px -2px 0 #000;
+    
+    
+}
+
+.encabezado p {
+    color: #fff;
+    font-size: 2em;
+    text-shadow: 
+    -2px -2px 0 #000;
+}
+
+.inicio-sesion {
+    width: 420px;
+    background-color: rgba(0, 0, 0, 0.8); /* Opacidad para que destaque sobre el fondo */
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 30px 40px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.inicio-sesion h1 {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.entrada {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+}
+
+.entrada input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    font-size: 16px;
+    color: #ffffff;
+    padding: 20px 45px 20px 20px;
+}
+
+.entrada input::placeholder {
+    color: #ffffff;
+}
+
+.entrada i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.recordar-contraseña {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+
+.recordar-contraseña label input {
+    accent-color: #ffffff;
+    margin-right: 3px;
+}
+
+.recordar-contraseña a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.recordar-contraseña a:hover {
+    text-decoration: underline;
+}
+
+.btn {
+    width: 100%;
+    height: 45px;
+    background: #fff;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+.registrar-usuario {
+    font-size: 14.5px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.registrar-usuario p a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.registrar-usuario p a:hover {
+    text-decoration: underline;
+}
