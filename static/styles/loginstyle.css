@@ -20,34 +20,30 @@ body {
 
 .encabezado {
     text-align: center;
-    margin-bottom: 50px
-    
+    margin-bottom: 50px;
 }
 
 .encabezado h1 {
     color: #fff;
     font-size: 4em;
     margin-bottom: 10px;
-    text-shadow: 
-    -2px -2px 0 #000;
-    
-    
+    text-shadow: -2px -2px 0 #000;
 }
 
 .encabezado p {
     color: #fff;
     font-size: 2em;
-    text-shadow: 
-    -2px -2px 0 #000;
+    text-shadow: -2px -2px 0 #000;
 }
 
 .inicio-sesion {
     width: 420px;
-    background-color: rgba(0, 0, 0, 0.8); /* Opacidad para que destaque sobre el fondo */
+    background-color: rgba(0, 0, 0, 0.8);
     color: #ffffff;
     border-radius: 10px;
     padding: 30px 40px;
     box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+    position: relative;
 }
 
 .inicio-sesion h1 {
@@ -86,6 +82,14 @@ body {
     top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
+}
+
+.mensaje-error {
+    position: relative;
+    color: #ff4d4d;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .recordar-contraseña {

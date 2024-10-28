@@ -26,6 +26,14 @@
             {% csrf_token %}
             <h1>Iniciar Sesión</h1>
 
+            {% if messages %}
+                <div class="mensaje-error">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <div class="entrada">
                 <input type="email" name="correo" placeholder="Ingrese su correo" required>
                 <i class='bx bx-user'></i>
@@ -34,14 +42,6 @@
                 <input type="password" name="contrasena" placeholder="Ingrese su contraseña" required>
                 <i class='bx bx-lock-alt'></i>
             </div>
-
-            {% if messages %}
-                <div class="mt-4">
-                    {% for message in messages %}
-                        <p class="text-red-500">{{ message }}</p>
-                    {% endfor %}
-                </div>
-            {% endif %}
 
             <div class="recordar-contraseña">
                 <label>
