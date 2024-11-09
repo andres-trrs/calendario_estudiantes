@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Usuario
 
+def muestrahome (request):
+    return render (request, 'home.html')
+
 def login(request):
     if request.method == 'POST':
         correo = request.POST.get('correo')

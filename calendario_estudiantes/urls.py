@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from calendarioApp.views import login
+from calendarioApp.views import login, muestrahome
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path ('', login, name='login'),
+    path('home/', muestrahome, name='home',)
 ]
