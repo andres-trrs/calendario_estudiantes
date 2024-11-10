@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/registrationstyle.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Registro</title>
+    <style>
+        body {
+            background-image: url("{% static 'images/fondo.png' %}");
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <h1>Registro</h1>
+
+            <div class="input-box">
+                <div class="input-field">
+                    <input type="text" name="nombre" placeholder="Nombre" required>
+                    <i class='bx bx-user'></i>
+                </div>
+                <div class="input-field">
+                    <input type="text" name="apellido" placeholder="Apellido" required>
+                    <i class='bx bx-user'></i>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <div class="input-field">
+                    <input type="email" name="correo" placeholder="Email" required>
+                    <i class='bx bxs-envelope'></i>
+                </div>
+                <div class="input-field">
+                    <input type="date" name="fecha_nacimiento" placeholder="Fecha de nacimiento" required>
+                    <i class='bx bx-calendar'></i>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <div class="input-field">
+                    <input type="password" name="contrasena" placeholder="Contraseña" required>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+                <div class="input-field">
+                    <input type="password" name="confirmar_contrasena" placeholder="Confirmar contraseña" required>
+                    <i class='bx bxs-lock-alt'></i>
+                </div>
+            </div>
+            
+            <label>
+                <input type="checkbox" required> Estoy de acuerdo a los términos de uso de esta plataforma
+            </label>
+            
+            <button type="submit" class="btn">Registrar</button>
+        </form>
+    </div>
+</body>
+</html>

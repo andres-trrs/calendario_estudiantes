@@ -10,8 +10,6 @@
     <style>
         body {
             background-image: url("{% static 'images/fondo.png' %}");
-            background-size: cover;
-            background-position: center;
         }
     </style>
 </head>
@@ -53,7 +51,7 @@
             <button type="submit" class="btn">Iniciar sesión</button>
 
             <div class="registrar-usuario">
-                <p>¿No tienes una cuenta? <a href="#">Regístrate</a></p>
+                <p>¿No tienes una cuenta? <a href="{% url 'register' %}">Regístrate</a></p>
             </div>
         </form>
     </div>
