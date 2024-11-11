@@ -1,11 +1,45 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+    <link rel="stylesheet" href="{% static 'styles/homestyle.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
 </head>
 <body>
-    <h1>Este será el Home</h1>
+    <div id="calendar-container">
+        <div id="calendar"></div>
+    </div>
+
+    <!-- Contenedor para el botón y el formulario -->
+    <div class="button-container">
+        <button id="addEventButton">Agregar Evento</button>
+
+        <!-- Formulario emergente para agregar un nuevo evento -->
+        <div id="eventPopup">
+            <h3>Agregar Evento</h3>
+            <label for="eventTitle">Título:</label>
+            <input type="text" id="eventTitle" placeholder="Título del evento" required><br><br>
+
+            <label for="eventDate">Fecha:</label>
+            <input type="date" id="eventDate" required><br><br>
+
+            <label for="eventStartTime">Hora de Inicio:</label>
+            <input type="time" id="eventStartTime" required><br><br>
+
+            <label for="eventEndTime">Hora de Fin:</label>
+            <input type="time" id="eventEndTime" required><br><br>
+
+            <label for="eventLocation">Ubicación:</label>
+            <input type="text" id="eventLocation" placeholder="Ubicación del evento"><br><br>
+
+            <button id="saveEventButton">Guardar Evento</button>
+            <button id="cancelEventButton">Cancelar</button>
+        </div>
+    </div>
+
+    <script src="{% static 'js/calendar.js' %}"></script>
 </body>
 </html>
