@@ -3,18 +3,27 @@ from django.contrib import messages
 from .models import Usuario, Evento
 
 def muestrahome(request):
+    correo = request.session.get('correo')  # Recuperamos el correo de la sesión
+    if correo:
+        print(correo)  # Imprimimos el correo en la terminal
+    else:
+        return redirect('login')  # Si no hay correo, redirigimos a login
+    
     return render(request, 'home.html')
 
 def login(request):
     if request.method == 'POST':
         correo = request.POST.get('correo')
         contrasena = request.POST.get('contrasena')
+        
         try:
             usuario = Usuario.objects.get(correo=correo, contrasena=contrasena)
-            # Acceso concedido, redirige a donde quieras
-            return redirect('home')  # Cambia 'home' por tu vista deseada
+            # Guardamos el correo en la sesión
+            request.session['correo'] = usuario.correo
+            return redirect('home')
         except Usuario.DoesNotExist:
             messages.error(request, "Credenciales incorrectas")
+    
     return render(request, 'login.html')
 
 def register(request):
@@ -49,6 +58,14 @@ def agregar_evento(request):
         hora_inicio = request.POST.get('hora_inicio')
         hora_fin = request.POST.get('hora_fin')
         ubicacion = request.POST.get('ubicacion')
+        correo = request.session.get('correo')
+        # Verificamos si el usuario está autenticado
+        #if request.user.is_authenticated:
+            # Imprimimos el correo del usuario autenticado
+        #    correo = request.user.email
+        #    print(f"Correo del usuario logueado: {correo}")
+        #else:
+        #    print("No hay usuario autenticado.")
 
         # Validación básica
         if titulo and fecha and hora_inicio and hora_fin:
@@ -57,7 +74,8 @@ def agregar_evento(request):
                 fecha=fecha,
                 hora_inicio=hora_inicio,
                 hora_fin=hora_fin,
-                ubicacion=ubicacion
+                ubicacion=ubicacion,
+                correo=correo,
             )
             messages.success(request, "Evento agregado exitosamente.")
         else:

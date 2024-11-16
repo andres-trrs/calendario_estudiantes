@@ -16,6 +16,7 @@ class Evento(models.Model):
     hora_inicio = models.TimeField()
     hora_fin = models.TimeField()
     ubicacion = models.CharField(max_length=100, blank=True, null=True)
+    correo = models.EmailField(max_length = 60, null=True, blank=True)
 
     class Meta:
         db_table = 'eventos'
