@@ -9,3 +9,13 @@ class Usuario(models.Model):
 
     class Meta:
         db_table = 'usuarios'  # Esto asegura que el modelo se mapee a la tabla existente
+
+class Evento(models.Model):
+    titulo = models.CharField(max_length=100)
+    fecha = models.DateField()
+    hora_inicio = models.TimeField()
+    hora_fin = models.TimeField()
+    ubicacion = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        db_table = 'eventos'

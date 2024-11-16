@@ -68,37 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     saveEventButton.addEventListener('click', () => {
-        const title = document.getElementById('eventTitle').value;
-        const date = document.getElementById('eventDate').value;
-        const startTime = document.getElementById('eventStartTime').value;
-        const endTime = document.getElementById('eventEndTime').value;
-        const location = document.getElementById('eventLocation').value;
-
-        if (title && date && startTime && endTime) {
-            const eventStart = new Date(`${date}T${startTime}:00`);
-            const eventEnd = new Date(`${date}T${endTime}:00`);
-
-            calendar.addEvent({
-                title: title,
-                start: eventStart,
-                end: eventEnd,
-                location: location,
-                timeStart: startTime,
-                timeEnd: endTime
-            });
-
-            eventPopup.style.display = 'none';
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventDate').value = '';
-            document.getElementById('eventStartTime').value = '';
-            document.getElementById('eventEndTime').value = '';
-            document.getElementById('eventLocation').value = '';
-        } else {
-            alert('Por favor, complete todos los campos requeridos.');
-        }
+        // Elimina la lógica de agregar eventos al calendario
+        //alert('La funcionalidad de guardar eventos está en construcción.');
+        eventPopup.style.display = 'none';
     });
 });
-
-
-
-

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import Usuario
+from .models import Usuario, Evento
 
 def muestrahome(request):
     return render(request, 'home.html')
@@ -41,3 +41,30 @@ def register(request):
             return redirect('login')  # Redirige a la página de login tras registrarse
     
     return render(request, 'registration.html')
+
+def agregar_evento(request):
+    if request.method == 'POST':
+        titulo = request.POST.get('titulo')
+        fecha = request.POST.get('fecha')
+        hora_inicio = request.POST.get('hora_inicio')
+        hora_fin = request.POST.get('hora_fin')
+        ubicacion = request.POST.get('ubicacion')
+
+        # Validación básica
+        if titulo and fecha and hora_inicio and hora_fin:
+            Evento.objects.create(
+                titulo=titulo,
+                fecha=fecha,
+                hora_inicio=hora_inicio,
+                hora_fin=hora_fin,
+                ubicacion=ubicacion
+            )
+            messages.success(request, "Evento agregado exitosamente.")
+        else:
+            messages.error(request, "Todos los campos son obligatorios.")
+
+        return redirect('home')  # Redirige a la página principal después de agregar un evento
+    
+    return render(request, 'home.html')
+
+

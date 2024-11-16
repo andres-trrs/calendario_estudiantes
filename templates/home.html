@@ -19,24 +19,29 @@
 
         <!-- Formulario emergente para agregar un nuevo evento -->
         <div id="eventPopup">
-            <h3>Agregar Evento</h3>
-            <label for="eventTitle">Título:</label>
-            <input type="text" id="eventTitle" placeholder="Título del evento" required><br><br>
-
-            <label for="eventDate">Fecha:</label>
-            <input type="date" id="eventDate" required><br><br>
-
-            <label for="eventStartTime">Hora de Inicio:</label>
-            <input type="time" id="eventStartTime" required><br><br>
-
-            <label for="eventEndTime">Hora de Fin:</label>
-            <input type="time" id="eventEndTime" required><br><br>
-
-            <label for="eventLocation">Ubicación:</label>
-            <input type="text" id="eventLocation" placeholder="Ubicación del evento"><br><br>
-
-            <button id="saveEventButton">Guardar Evento</button>
-            <button id="cancelEventButton">Cancelar</button>
+            <form action="{% url 'agregar_evento' %}" method="post">
+                {% csrf_token %}
+                <h3>Agregar Evento</h3>
+        
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" name="titulo" placeholder="Título del evento" required><br><br>
+        
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha" name="fecha" required><br><br>
+        
+                <label for="hora_inicio">Hora de Inicio:</label>
+                <input type="time" id="hora_inicio" name="hora_inicio" required><br><br>
+        
+                <label for="hora_fin">Hora de Fin:</label>
+                <input type="time" id="hora_fin" name="hora_fin" required><br><br>
+        
+                <label for="ubicacion">Ubicación:</label>
+                <input type="text" id="ubicacion" name="ubicacion" placeholder="Ubicación del evento"><br><br>
+        
+                <button type="submit">Guardar Evento</button>
+                <button type="button" id="cancelEventButton">Cancelar</button>
+            </form>
+        </div>
         </div>
     </div>
 
