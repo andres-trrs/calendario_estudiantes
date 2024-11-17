@@ -188,11 +188,15 @@ const logoutButton = document.getElementById('logoutButton');
 
 // Agregar el evento click
 logoutButton.addEventListener('click', () => {
-    // Aquí puedes agregar la lógica para cerrar sesión
     if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
-        // Aquí va tu lógica de cierre de sesión
+        // Aquí puedes agregar la lógica para cerrar sesión
         alert('Cerrando sesión...'); // Placeholder
-        // Ejemplo: window.location.href = 'logout.php';
+
+        // Obtener la URL de login desde el atributo 'data-login-url'
+        const loginUrl = logoutButton.getAttribute('data-login-url');
+
+        // Redirigir al usuario a la página de login
+        window.location.href = loginUrl;
     }
     menu.style.display = 'none'; // Cerrar el menú
 });
