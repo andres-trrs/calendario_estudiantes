@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .models import Usuario, Evento
+from django.http import JsonResponse
 
 def muestrahome(request):
     correo = request.session.get('correo')  # Recuperamos el correo de la sesión
@@ -77,12 +78,33 @@ def agregar_evento(request):
                 ubicacion=ubicacion,
                 correo=correo,
             )
-            messages.success(request, "Evento agregado exitosamente.")
         else:
             messages.error(request, "Todos los campos son obligatorios.")
 
         return redirect('home')  # Redirige a la página principal después de agregar un evento
     
     return render(request, 'home.html')
+
+def obtener_eventos(request):
+    # Obtener el correo del usuario autenticado
+    correo_usuario = request.session.get('correo')
+
+    # Consultar los eventos asociados al usuario
+    eventos = Evento.objects.filter(correo=correo_usuario)
+
+    # Transformar los eventos al formato esperado por FullCalendar
+    eventos_json = []
+    for evento in eventos:
+        eventos_json.append({
+            "eventTitle": evento.titulo,
+            "eventStartDate": evento.fecha.strftime('%m/%d/%Y'),  # Formato de fecha MM/DD/YYYY
+            "eventEndDate": evento.fecha.strftime('%m/%d/%Y'),    # Asumiendo que el evento dura 1 día
+            "eventStartTime": evento.hora_inicio.strftime('%I:%M %p'),  # Formato de hora 12H AM/PM
+            "eventEndTime": evento.hora_fin.strftime('%I:%M %p'),       # Formato de hora 12H AM/PM
+            "eventLocation": evento.ubicacion or "",  # Ubicación puede ser opcional
+        })
+
+    # Devolver los datos como JSON
+    return JsonResponse({"events": eventos_json})
 
 

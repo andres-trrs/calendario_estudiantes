@@ -1,18 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
-    let requestCalendar = "./events.json"; // Ruta al archivo de eventos
+    let requestCalendar = "/api/eventos/"; // Nueva URL para obtener los eventos
 
     var calendarEl = document.getElementById('calendar');
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        locale: 'es',
+        locale: 'es', // Configuración para español
         events: function(info, successCallback, failureCallback) {
             fetch(requestCalendar)
                 .then(response => response.json())
                 .then(data => {
                     let eventos = data.events.map(evento => ({
                         title: evento.eventTitle,
-                        start: new Date(evento.eventStartDate),
-                        end: new Date(evento.eventEndDate),
+                        start: new Date(evento.eventStartDate + " " + evento.eventStartTime),
+                        end: new Date(evento.eventEndDate + " " + evento.eventEndTime),
                         location: evento.eventLocation,
                         timeStart: evento.eventStartTime,
                         timeEnd: evento.eventEndTime
@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     calendar.render();
 
+    // Opciones adicionales: mostrar un popup para agregar eventos manualmente
     const addEventButton = document.getElementById('addEventButton');
     const eventPopup = document.getElementById('eventPopup');
     const cancelEventButton = document.getElementById('cancelEventButton');
@@ -68,8 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     saveEventButton.addEventListener('click', () => {
-        // Elimina la lógica de agregar eventos al calendario
-        //alert('La funcionalidad de guardar eventos está en construcción.');
+        // Esta parte no guarda eventos directamente en el calendario,
+        // sino que se puede personalizar para enviar datos al backend.
         eventPopup.style.display = 'none';
     });
 });
