@@ -20,8 +20,6 @@
             <!-- Menú desplegable -->
         <div id="menu" class="menu">
             <button id="addEventButton">Agregar Evento</button>
-            <button id="editEventButton">Editar Evento</button>
-            <button id="deleteEventButton">Eliminar Evento</button>
             <button id="editAccountButton">Editar Cuenta</button>
             <button id="logoutButton" data-login-url="{% url 'login' %}">Cerrar Sesión</button>
         </div>
@@ -52,6 +50,15 @@
             </form>
         </div>
         </div>
+
+        <div id="eventActionPopup" style="display: none;">
+            <div id="eventActionContent">
+                <p>¿Qué acción desea realizar?</p>
+                <button id="editEventButton" class="popup-button edit-button">Editar evento</button>
+                <button id="deleteEventButton" class="popup-button delete-button">Eliminar evento</button>
+            </div>
+        </div>
+
     </div>
 
     <script src="{% static 'js/calendar.js' %}"></script>

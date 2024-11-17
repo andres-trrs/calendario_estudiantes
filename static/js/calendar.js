@@ -59,14 +59,30 @@ document.addEventListener('DOMContentLoaded', function() {
         eventClick: function(info) {
             // Evita el comportamiento predeterminado
             info.jsEvent.preventDefault();
-
-            // Muestra los detalles del evento
-            alert(
-                `Nombre del evento: ${info.event.title}\n` +
-                `Ubicación: ${info.event.extendedProps.location}\n` +
-                `Fecha: ${info.event.start.toLocaleDateString()}\n` +
-                `Hora: ${info.event.extendedProps.timeStart} - ${info.event.extendedProps.timeEnd}`
-            );
+        
+            // Muestra el popup centrado
+            const popup = document.getElementById('eventActionPopup');
+            popup.style.display = 'flex';
+        
+            // Añadir evento para cerrar el popup al hacer clic fuera
+            popup.addEventListener('click', function(event) {
+                if (event.target === popup) {
+                    popup.style.display = 'none';
+                }
+            });
+        
+            // Botones en el popup (actualmente sin funcionalidad)
+            const editButton = document.getElementById('editEventButton');
+            const deleteButton = document.getElementById('deleteEventButton');
+        
+            // Opción de agregar funcionalidad futura aquí
+            editButton.addEventListener('click', function() {
+                console.log('Editar evento');
+            });
+        
+            deleteButton.addEventListener('click', function() {
+                console.log('Eliminar evento');
+            });
         },
 
         eventContent: function(arg) {
