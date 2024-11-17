@@ -7,16 +7,17 @@
 }
 
 /* Contenedor de botón y formulario */
+/* Ajustes generales del botón y contenedor */
 .button-container {
-    position: absolute;
+    position: absolute; /* Cambiaremos esto en pantallas pequeñas */
     top: 20px;
     left: 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    z-index: 10; /* Asegúrate de que esté encima si es necesario */
 }
 
-/* Estilo para el botón */
 #addEventButton {
     padding: 10px 20px;
     font-size: 16px;
@@ -31,6 +32,20 @@
 
 #addEventButton:hover {
     background-color: #0056b3;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .button-container {
+        position: static; /* Elimina la posición absoluta */
+        margin-bottom: 20px; /* Añade espacio debajo del botón */
+    }
+
+    #addEventButton {
+        width: 100%; /* Asegura que ocupe el ancho completo */
+        font-size: 14px; /* Reduce ligeramente el tamaño de la fuente */
+        text-align: center;
+    }
 }
 
 /* Estilo para el formulario emergente */
@@ -124,3 +139,502 @@
     }
 }
 
+/* Menú desplegable */
+.menu {
+    display: none; /* Inicialmente oculto */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    position: absolute;
+    top: 60px; /* Ajusta según la posición del botón */
+    left: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    animation: fadeIn 0.3s ease;
+}
+
+.menu button {
+    display: block;
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.menu button:hover {
+    background-color: #0056b3;
+}
+
+/* Animación para mostrar el menú */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+#toggleMenuButton,
+#addEventButton,
+#editEventButton,
+#deleteEventButton {
+    background-color: #2c3e50;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+/* Efectos hover compartidos */
+#toggleMenuButton:hover,
+#addEventButton:hover,
+#editEventButton:hover,
+#deleteEventButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Efectos active compartidos */
+#toggleMenuButton:active,
+#addEventButton:active,
+#editEventButton:active,
+#deleteEventButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Colores específicos para cada botón */
+#toggleMenuButton {
+    background-color: #2c3e50;
+}
+#toggleMenuButton:hover {
+    background-color: #34495e;
+}
+
+#addEventButton {
+    background-color: #27ae60;
+}
+#addEventButton:hover {
+    background-color: #2ecc71;
+}
+
+#editEventButton {
+    background-color: #f39c12;
+}
+#editEventButton:hover {
+    background-color: #f1c40f;
+}
+
+#deleteEventButton {
+    background-color: #c0392b;
+}
+#deleteEventButton:hover {
+    background-color: #e74c3c;
+}
+
+/* Efecto ripple para todos los botones */
+#toggleMenuButton::after,
+#addEventButton::after,
+#editEventButton::after,
+#deleteEventButton::after {
+    content: '';
+    position: absolute;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+#toggleMenuButton:active::after,
+#addEventButton:active::after,
+#editEventButton:active::after,
+#deleteEventButton:active::after {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 1;
+    transition: 0s;
+}
+
+/* Estilo del menú contenedor */
+/* Estilo del menú contenedor */
+.menu {
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+    min-width: 200px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-top: 10px;
+}
+
+/* Estilos base para todos los botones del menú */
+.menu button {
+    width: 100%;
+    padding: 12px 20px;
+    margin-bottom: 8px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+/* Estilos específicos para cada botón */
+#toggleMenuButton {
+    background-color: #2c3e50;
+    border: none;
+    padding: 12px 24px;
+    color: white;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 200px;
+}
+
+
+/* Estilos para el formulario emergente */
+#eventPopup {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 300px;
+}
+
+/* Estilos para los botones del formulario */
+#saveEventButton, #cancelEventButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#saveEventButton {
+    background-color: #27ae60;
+    color: white;
+}
+
+#cancelEventButton {
+    background-color: #7f8c8d;
+    color: white;
+    margin-left: 10px;
+}
+
+/* Estilos para los inputs del formulario */
+#eventPopup input {
+    width: calc(100% - 20px);
+    padding: 8px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+#eventPopup label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+    .menu, #eventPopup {
+        width: calc(100% - 40px);
+        min-width: unset;
+    }
+    
+    #toggleMenuButton {
+        width: 100%;
+    }
+}
+/* Agregar estilo específico para el botón de editar cuenta */
+#editAccountButton {
+    background-color: #8e44ad; /* Color morado para distinguirlo */
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+#editAccountButton:hover {
+    background-color: #9b59b6;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#editAccountButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Agregar el efecto ripple también para el nuevo botón */
+#editAccountButton::after {
+    content: '';
+    position: absolute;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: all 0.5s ease;
+}
+
+#editAccountButton:active::after {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 1;
+    transition: 0s;
+}
+/* Estilo para el botón Hoy */
+.fc .fc-button-primary {
+    background-color: #2c3e50 !important;
+    border-color: #2c3e50 !important;
+    color: white !important;
+    padding: 8px 16px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    text-transform: capitalize !important;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: #34495e !important;
+    border-color: #34495e !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+.fc .fc-button-primary:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+/* Estilo específico para los botones de navegación (flechas) */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+    background-color: #2c3e50 !important;
+    border-color: #2c3e50 !important;
+    padding: 8px 12px !important;
+    transition: all 0.3s ease !important;
+}
+
+.fc .fc-prev-button:hover,
+.fc .fc-next-button:hover {
+    background-color: #34495e !important;
+    border-color: #34495e !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
+}
+
+/* Estilo para el botón activo */
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background-color: #1a252f !important;
+    border-color: #1a252f !important;
+    transform: translateY(0) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+/* Ajuste del espacio entre botones */
+.fc .fc-button-group > .fc-button {
+    margin: 0 2px !important;
+}
+
+/* Estilo para el título del mes */
+.fc .fc-toolbar-title {
+    font-size: 1.5em !important;
+    font-weight: 600 !important;
+    color: #2c3e50 !important;
+    text-transform: capitalize !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .fc .fc-toolbar {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    .fc .fc-toolbar-title {
+        font-size: 1.2em !important;
+    }
+    
+    .fc .fc-button {
+        padding: 6px 12px !important;
+        font-size: 0.9em !important;
+    }
+}
+/* Variables de colores turquesa */
+/* Variables de colores azul oscuro */
+:root {
+    --blue-darkest: #34495e;  /* Azul más oscuro */
+    --blue-darker: #34495e;   /* Azul muy oscuro */
+    --blue-dark: #34495e;     /* Azul oscuro */
+    --blue-medium: #34495e;   /* Azul medio */
+    --blue-light: #34495e;    /* Azul más claro */
+    --blue-hover: #34495e;    /* Azul hover */
+}
+
+/* Estilo del botón de menú principal */
+#toggleMenuButton {
+    background-color: var(--blue-darkest);
+}
+#toggleMenuButton:hover {
+    background-color: var(--blue-darker);
+}
+
+/* Estilos para los botones del menú */
+#addEventButton {
+    background-color: var(--blue-darker);
+}
+#addEventButton:hover {
+    background-color: var(--blue-hover);
+}
+
+#editEventButton {
+    background-color: var(--blue-dark);
+}
+#editEventButton:hover {
+    background-color: var(--blue-hover);
+}
+
+#deleteEventButton {
+    background-color: var(--blue-medium);
+}
+#deleteEventButton:hover {
+    background-color: var(--blue-hover);
+}
+
+#editAccountButton {
+    background-color: var(--blue-light);
+}
+#editAccountButton:hover {
+    background-color: var(--blue-hover);
+}
+
+/* Estilo para el botón de cerrar sesión */
+#logoutButton {
+    background-color: var(--blue-darkest);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 8px;
+    padding-top: 16px;
+}
+
+#logoutButton:hover {
+    background-color: var(--blue-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Mantener los efectos de hover y active para todos los botones */
+.menu button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.menu button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Mejorar la visibilidad del menú desplegable */
+.menu {
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+    min-width: 200px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    margin-top: 10px;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .menu button {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+    
+    #logoutButton {
+        padding-top: 14px;
+        margin-top: 6px;
+    }
+}
+#menu {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    top: 50px; /* Ajusta según necesites */
+    right: 0;
+    background: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
