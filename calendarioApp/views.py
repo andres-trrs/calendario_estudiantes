@@ -135,16 +135,11 @@ def editar_evento(request, event_id):
 
 
 
-@csrf_exempt
-def eliminar_evento(request, evento_id):
-    if request.method == "DELETE":
-        try:
-            evento = Evento.objects.get(id=evento_id)
-            usuario = evento.usuario  # Ajusta según tu modelo
-            usuario.delete()  # Elimina al usuario y todos sus datos relacionados
-            return JsonResponse({"mensaje": "Usuario y eventos eliminados correctamente."}, status=200)
-        except Evento.DoesNotExist:
-            return JsonResponse({"error": "Evento no encontrado."}, status=404)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
-    return JsonResponse({"error": "Método no permitido."}, status=405)
+def eliminar_evento(request):
+    # Verificamos si el usuario tiene una sesión activa
+    correo = request.session.get('correo')
+    if correo:
+        print(f"El correo que va a eliminar el evento es: {correo}")
+        return JsonResponse({"mensaje": "Evento eliminado correctamente", "correo": correo})
+    else:
+        return JsonResponse({"mensaje": "No hay usuario activo"}, status=403)

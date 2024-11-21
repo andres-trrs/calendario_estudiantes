@@ -13,11 +13,11 @@
         <div id="calendar"></div>
     </div>
 
-        <!-- Contenedor para el botón y el formulario -->
-        <div class="button-container">
-            <button id="toggleMenuButton">Abrir Menú</button>
-        
-            <!-- Menú desplegable -->
+    <!-- Contenedor para el botón y el formulario -->
+    <div class="button-container">
+        <button id="toggleMenuButton">Abrir Menú</button>
+
+        <!-- Menú desplegable -->
         <div id="menu" class="menu">
             <button id="addEventButton">Agregar Evento</button>
             <button id="editAccountButton">Editar Cuenta</button>
@@ -29,76 +29,141 @@
             <form action="{% url 'agregar_evento' %}" method="post">
                 {% csrf_token %}
                 <h3>Agregar Evento</h3>
-        
+
                 <label for="titulo">Título:</label>
                 <input type="text" id="titulo" name="titulo" placeholder="Título del evento" required><br><br>
-        
+
                 <label for="fecha">Fecha:</label>
                 <input type="date" id="fecha" name="fecha" required><br><br>
-        
+
                 <label for="hora_inicio">Hora de Inicio:</label>
                 <input type="time" id="hora_inicio" name="hora_inicio" required><br><br>
-        
+
                 <label for="hora_fin">Hora de Fin:</label>
                 <input type="time" id="hora_fin" name="hora_fin" required><br><br>
-        
+
                 <label for="ubicacion">Ubicación:</label>
                 <input type="text" id="ubicacion" name="ubicacion" placeholder="Ubicación del evento"><br><br>
-        
+
                 <button type="submit">Guardar Evento</button>
                 <button type="button" id="cancelEventButton">Cancelar</button>
             </form>
         </div>
-        </div>
-
-        <div id="eventActionPopup" style="display: none;">
-            <div id="eventActionContent">
-                <p>¿Qué acción desea realizar?</p>
-                <button id="editEventButton" class="popup-button edit-button">Editar evento</button>
-                <button id="deleteEventButton" class="popup-button delete-button">Eliminar evento</button>
-            </div>
-        </div>
-
-        <!-- Modal de confirmación -->
-        <div id="confirmDeleteModal" class="modal">
-            <div class="modal-content">
-                <p>¿Está seguro de que desea eliminar este evento?</p>
-                <button id="confirmDeleteButton">Sí</button>
-                <button id="cancelDeleteButton">No</button>
-            </div>
-        </div>        
-
     </div>
-    
+
+    <div id="eventActionPopup" style="display: none;">
+        <div id="eventActionContent">
+            <p>¿Qué acción desea realizar?</p>
+            <button id="editEventButton" class="popup-button edit-button">Editar evento</button>
+            <button id="deleteEventButton" class="popup-button delete-button">Eliminar evento</button>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div id="confirmDeleteModal" class="modal">
+        <div class="modal-content">
+            <p>¿Está seguro de que desea eliminar este evento?</p>
+            <button id="confirmDeleteButton">Sí</button>
+            <button id="cancelDeleteButton">No</button>
+        </div>
+    </div>        
+
     <!-- Formulario emergente para editar un evento -->
     <div id="editEventPopup" class="popup">
-    <div class="popup-content">
-        <h2>Editar Evento</h2>
-        <form id="editEventForm">
-            <label for="editEventTitle">Título:</label>
-            <input type="text" id="editEventTitle" name="editEventTitle" required>
+        <div class="popup-content">
+            <h2>Editar Evento</h2>
+            <form id="editEventForm">
+                <label for="editEventTitle">Título:</label>
+                <input type="text" id="editEventTitle" name="editEventTitle" required>
 
-            <label for="editEventDate">Fecha:</label>
-            <input type="date" id="editEventDate" name="editEventDate" required>
+                <label for="editEventDate">Fecha:</label>
+                <input type="date" id="editEventDate" name="editEventDate" required>
 
-            <label for="editEventStartTime">Hora de Inicio:</label>
-            <input type="time" id="editEventStartTime" name="editEventStartTime" required>
+                <label for="editEventStartTime">Hora de Inicio:</label>
+                <input type="time" id="editEventStartTime" name="editEventStartTime" required>
 
-            <label for="editEventEndTime">Hora de Fin:</label>
-            <input type="time" id="editEventEndTime" name="editEventEndTime" required>
+                <label for="editEventEndTime">Hora de Fin:</label>
+                <input type="time" id="editEventEndTime" name="editEventEndTime" required>
 
-            <label for="editEventLocation">Ubicación:</label>
-            <input type="text" id="editEventLocation" name="editEventLocation">
+                <label for="editEventLocation">Ubicación:</label>
+                <input type="text" id="editEventLocation" name="editEventLocation">
 
-            <div class="popup-buttons">
-                <button type="button" id="saveEditEventButton" class="save-button">Guardar Cambios</button>
-                <button type="button" id="cancelEditButton" class="cancel-button">Cancelar</button>
-            </div>
-        </form>
+                <div class="popup-buttons">
+                    <button type="button" id="saveEditEventButton" class="save-button">Guardar Cambios</button>
+                    <button type="button" id="cancelEditButton" class="cancel-button">Cancelar</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+            const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+            const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+            let selectedEvent = null; // Almacena el evento seleccionado para eliminar
+    
+            // Simulamos la selección de un evento al hacer clic en "Eliminar evento"
+            document.getElementById('deleteEventButton').addEventListener('click', function() {
+                // Aquí deberías capturar los detalles del evento real seleccionado
+                selectedEvent = {
+                    titulo: "Reunión de equipo",
+                    fecha: "2024-11-21",
+                    hora_inicio: "10:00",
+                    hora_fin: "11:00",
+                    ubicacion: "Sala A"
+                };
+    
+                confirmDeleteModal.style.display = 'block'; // Mostrar el modal de confirmación
+            });
+    
+            // Evento al hacer clic en "Sí" para confirmar la eliminación
+            confirmDeleteButton.addEventListener('click', function() {
+                if (!selectedEvent) {
+                    alert("No hay un evento seleccionado para eliminar.");
+                    return;
+                }
+    
+                fetch('/eliminar-evento/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken') // Token CSRF
+                    },
+                    body: JSON.stringify(selectedEvent)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.mensaje); // Mensaje del servidor
+                })
+                .catch(error => console.error('Error:', error));
+    
+                confirmDeleteModal.style.display = 'none'; // Ocultar el modal
+            });
+    
+            // Evento al hacer clic en "No"
+            cancelDeleteButton.addEventListener('click', function() {
+                confirmDeleteModal.style.display = 'none'; // Ocultar el modal
+            });
+    
+            // Función para obtener el token CSRF
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
 
     <script src="{% static 'js/calendar.js' %}"></script>
 </body>

@@ -9,6 +9,5 @@ urlpatterns = [
     path('home/', muestrahome, name='home'),
     path('agregar-evento/', agregar_evento, name='agregar_evento'),
     path('api/eventos/', obtener_eventos, name='obtener_eventos'),
-    path('editar_evento/<int:event_id>/', editar_evento, name='editar_evento'),
-    path('eliminar_evento/<int:event_id>/', eliminar_evento, name='eliminar_evento'),
+    path('eliminar-evento/', eliminar_evento, name='eliminar_evento'),
 ]
