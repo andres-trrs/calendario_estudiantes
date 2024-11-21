@@ -59,7 +59,46 @@
             </div>
         </div>
 
+        <!-- Modal de confirmación -->
+        <div id="confirmDeleteModal" class="modal">
+            <div class="modal-content">
+                <p>¿Está seguro de que desea eliminar este evento?</p>
+                <button id="confirmDeleteButton">Sí</button>
+                <button id="cancelDeleteButton">No</button>
+            </div>
+        </div>        
+
     </div>
+    
+    <!-- Formulario emergente para editar un evento -->
+    <div id="editEventPopup" class="popup">
+    <div class="popup-content">
+        <h2>Editar Evento</h2>
+        <form id="editEventForm">
+            <label for="editEventTitle">Título:</label>
+            <input type="text" id="editEventTitle" name="editEventTitle" required>
+
+            <label for="editEventDate">Fecha:</label>
+            <input type="date" id="editEventDate" name="editEventDate" required>
+
+            <label for="editEventStartTime">Hora de Inicio:</label>
+            <input type="time" id="editEventStartTime" name="editEventStartTime" required>
+
+            <label for="editEventEndTime">Hora de Fin:</label>
+            <input type="time" id="editEventEndTime" name="editEventEndTime" required>
+
+            <label for="editEventLocation">Ubicación:</label>
+            <input type="text" id="editEventLocation" name="editEventLocation">
+
+            <div class="popup-buttons">
+                <button type="button" id="saveEditEventButton" class="save-button">Guardar Cambios</button>
+                <button type="button" id="cancelEditButton" class="cancel-button">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 
     <script src="{% static 'js/calendar.js' %}"></script>
 </body>

@@ -247,3 +247,104 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+// Abrir el popup de edición de eventos
+document.querySelector('#editEventButton').addEventListener('click', () => {
+    document.querySelector('#editEventPopup').classList.add('show');
+});
+
+// Cerrar el popup al hacer clic en el botón "Cancelar"
+document.querySelector('#cancelEditButton').addEventListener('click', () => {
+    document.querySelector('#editEventPopup').classList.remove('show');
+});
+
+// Cerrar el popup si se hace clic fuera del contenido
+document.addEventListener('click', (e) => {
+    const popup = document.querySelector('#editEventPopup');
+    if (!popup.contains(e.target) && e.target.id !== 'editEventButton') {
+        popup.classList.remove('show');
+    }
+});
+const deleteEventButton = document.getElementById('deleteEventButton');
+        const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+        const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+
+        // Mostrar el modal al hacer clic en "Eliminar evento"
+        deleteEventButton.addEventListener('click', () => {
+            confirmDeleteModal.style.display = 'block';
+        });
+
+        // Cerrar el modal al hacer clic en "Cancelar"
+        cancelDeleteButton.addEventListener('click', () => {
+            confirmDeleteModal.style.display = 'none';
+        });
+
+        // Acción de confirmación de eliminación
+        confirmDeleteButton.addEventListener('click', () => {
+            confirmDeleteModal.style.display = 'none';
+            // Aquí puedes agregar la lógica para eliminar el evento
+            alert('Evento eliminado correctamente.');
+        });
+
+const saveChangesButton = document.getElementById('saveChangesButton');
+
+saveChangesButton.addEventListener('click', () => {
+    const eventId = document.getElementById('editEventId').value; // ID del evento que se está editando
+    const title = document.getElementById('editEventTitle').value.trim();
+    const date = document.getElementById('editEventDate').value.trim();
+    const startTime = document.getElementById('editEventStartTime').value.trim();
+    const endTime = document.getElementById('editEventEndTime').value.trim();
+    const location = document.getElementById('editEventLocation').value.trim();
+
+    // Validar datos
+    if (!title || !date || !startTime || !endTime) {
+        alert('Por favor, complete todos los campos obligatorios.');
+        return;
+    }
+
+    // Validar horario
+    const startDateTime = new Date(`${date}T${startTime}`);
+    const endDateTime = new Date(`${date}T${endTime}`);
+    if (endDateTime <= startDateTime) {
+        alert('La hora de fin debe ser posterior a la hora de inicio.');
+        return;
+    }
+
+    // Datos a enviar al backend
+    const updatedEvent = {
+        title: title,
+        start: date,
+        start_time: startTime,
+        end_time: endTime,
+        location: location,
+    };
+
+    // Realizar la solicitud PUT al backend
+    fetch(`/editar_evento/${eventId}/`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedEvent),
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.status === 'success') {
+                // Mostrar mensaje de éxito
+                alert('Los datos han sido actualizados correctamente.');
+
+                // Cerrar el popup
+                document.querySelector('#editEventPopup').classList.remove('show');
+
+                // Recargar el calendario para reflejar los cambios
+                calendar.refetchEvents();
+            } else {
+                alert(`Error: ${data.message || 'No se pudo actualizar el evento.'}`);
+            }
+        })
+        .catch((error) => {
+            console.error('Error al actualizar el evento:', error);
+            alert('Ocurrió un error inesperado.');
+        });
+});

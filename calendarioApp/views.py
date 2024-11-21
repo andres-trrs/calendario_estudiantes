@@ -1,7 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from .models import Usuario, Evento
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import Usuario, Evento
+from django.shortcuts import get_object_or_404
+import json
+
 
 def muestrahome(request):
     correo = request.session.get('correo')  # Recuperamos el correo de la sesión
@@ -107,4 +111,40 @@ def obtener_eventos(request):
     # Devolver los datos como JSON
     return JsonResponse({"events": eventos_json})
 
+def editar_evento(request, event_id):
+    if request.method == 'PUT':  # Método PUT para actualizar
+        try:
+            data = json.loads(request.body)
+            evento = get_object_or_404(Evento, id=event_id)
 
+            # Actualizar campos con los datos proporcionados
+            evento.titulo = data.get('title', evento.titulo)
+            evento.fecha = data.get('start', evento.fecha)
+            evento.hora_inicio = data.get('start_time', evento.hora_inicio)
+            evento.hora_fin = data.get('end_time', evento.hora_fin)
+            evento.ubicacion = data.get('location', evento.ubicacion)
+
+            evento.save()  # Guardamos los cambios en la base de datos
+            return JsonResponse({'status': 'success', 'message': 'Evento actualizado correctamente'})
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'error', 'message': 'Datos inválidos'}, status=400)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'error', 'message': 'Método no permitido'}, status=405)
+
+
+
+@csrf_exempt
+def eliminar_evento(request, evento_id):
+    if request.method == "DELETE":
+        try:
+            evento = Evento.objects.get(id=evento_id)
+            usuario = evento.usuario  # Ajusta según tu modelo
+            usuario.delete()  # Elimina al usuario y todos sus datos relacionados
+            return JsonResponse({"mensaje": "Usuario y eventos eliminados correctamente."}, status=200)
+        except Evento.DoesNotExist:
+            return JsonResponse({"error": "Evento no encontrado."}, status=404)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Método no permitido."}, status=405)
