@@ -81,7 +81,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         
             deleteButton.addEventListener('click', function() {
-                console.log('Eliminar evento');
+                confirmDeleteButton.addEventListener('click', () => {
+                    confirmDeleteModal.style.display = 'none';
+                    // Aquí puedes agregar la lógica para eliminar el evento
+                    alert(info.event.title)
+                    alert(info.event.extendedProps.timeStart)
+                    alert(info.event.extendedProps.timeEnd)
+                    alert(info.event.extendedProps.location)
+                });
             });
         },
 
