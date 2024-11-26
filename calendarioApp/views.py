@@ -111,20 +111,35 @@ def obtener_eventos(request):
     # Devolver los datos como JSON
     return JsonResponse({"events": eventos_json})
 
+@csrf_exempt
 def editar_evento(request, event_id):
-    if request.method == 'PUT':  # Método PUT para actualizar
-        try:
-            data = json.loads(request.body)
-            evento = get_object_or_404(Evento, id=event_id)
+    # Obtener el evento por ID
+    evento = get_object_or_404(Evento, id=event_id)
 
-            # Actualizar campos con los datos proporcionados
+    if request.method == 'GET':
+        # Si es una solicitud GET, retornar los datos del evento para mostrar en el popup
+        event_data = {
+            'title': evento.titulo,
+            'start': evento.fecha,
+            'start_time': evento.hora_inicio,
+            'end_time': evento.hora_fin,
+            'location': evento.ubicacion
+        }
+        return JsonResponse(event_data)
+
+    elif request.method == 'PUT':
+        # Si es una solicitud PUT, actualizar los datos del evento
+        try:
+            data = json.loads(request.body)  # Obtener los datos del cuerpo de la solicitud
+
+            # Actualizar los campos del evento con los datos proporcionados
             evento.titulo = data.get('title', evento.titulo)
             evento.fecha = data.get('start', evento.fecha)
             evento.hora_inicio = data.get('start_time', evento.hora_inicio)
             evento.hora_fin = data.get('end_time', evento.hora_fin)
             evento.ubicacion = data.get('location', evento.ubicacion)
 
-            evento.save()  # Guardamos los cambios en la base de datos
+            evento.save()  # Guardar los cambios en la base de datos
             return JsonResponse({'status': 'success', 'message': 'Evento actualizado correctamente'})
         except json.JSONDecodeError:
             return JsonResponse({'status': 'error', 'message': 'Datos inválidos'}, status=400)

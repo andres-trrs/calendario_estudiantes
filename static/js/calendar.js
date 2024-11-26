@@ -75,10 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const editButton = document.getElementById('editEventButton');
             const deleteButton = document.getElementById('deleteEventButton');
         
-            // Opción de agregar funcionalidad futura aquí
-            editButton.addEventListener('click', function() {
-                console.log('Editar evento');
-            });
         
             function convertirHoraA24Horas(hora) {
                 const [time, modifier] = hora.split(' ');
@@ -92,6 +88,85 @@ document.addEventListener('DOMContentLoaded', function() {
             
                 return `${hours}:${minutes}`;
             }
+
+            editButton.addEventListener('click', function () {
+                // Recuperar datos del evento
+                const title = info.event.title; // Título del evento
+                const date = info.event.startStr.split('T')[0]; // Fecha en formato YYYY-MM-DD
+                const location = info.event.extendedProps.location || ''; // Ubicación del evento
+            
+                // Recuperar horas (asegurando que existan y manejando el formato)
+                let startTime = info.event.extendedProps.timeStart || '';
+                let endTime = info.event.extendedProps.timeEnd || '';
+            
+                // Validar y convertir el formato de las horas a 24 horas si es necesario
+                if (startTime.includes('AM') || startTime.includes('PM')) {
+                    startTime = convertirHoraA24Horas(startTime);
+                }
+                if (endTime.includes('AM') || endTime.includes('PM')) {
+                    endTime = convertirHoraA24Horas(endTime);
+                }
+            
+                // Verificar en la consola para debug (puedes quitar esto más tarde)
+                console.log('Datos del evento recuperados:', { title, date, startTime, endTime, location });
+            
+                // Actualizar los valores del formulario en el popup
+                document.getElementById('editEventTitle').value = title;
+                document.getElementById('editEventDate').value = date;
+                document.getElementById('editEventStartTime').value = startTime;
+                document.getElementById('editEventEndTime').value = endTime;
+                document.getElementById('editEventLocation').value = location;
+            
+                // Mostrar el popup
+                document.getElementById('editEventPopup').style.display = 'block';
+            });
+            
+            
+            // Función para obtener el token CSRF
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === name + '=') {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }            
+
+            document.getElementById('saveEditEventButton').addEventListener('click', function () {
+                // Recuperar los datos del formulario
+                const updatedTitle = document.getElementById('editEventTitle').value;
+                const updatedDate = document.getElementById('editEventDate').value;
+                const updatedStartTime = document.getElementById('editEventStartTime').value;
+                const updatedEndTime = document.getElementById('editEventEndTime').value;
+                const updatedLocation = document.getElementById('editEventLocation').value;
+            
+                // Validación básica (opcional)
+                if (!updatedTitle || !updatedDate || !updatedStartTime || !updatedEndTime) {
+                    alert('Por favor, complete todos los campos obligatorios.');
+                    return;
+                }
+            
+                // Actualizar el evento seleccionado
+                info.event.setProp('title', updatedTitle);
+                info.event.setStart(`${updatedDate}T${updatedStartTime}`);
+                info.event.setEnd(`${updatedDate}T${updatedEndTime}`);
+                info.event.setExtendedProp('location', updatedLocation);
+            
+                // Refrescar la página para reflejar los cambios
+                location.reload();
+            });
+            
+            document.getElementById('cancelEditButton').addEventListener('click', function () {
+                // Cerrar el popup
+                document.getElementById('editEventPopup').style.display = 'none';
+            });
+
 
         deleteButton.addEventListener('click', function () {
             confirmDeleteButton.addEventListener('click', () => {

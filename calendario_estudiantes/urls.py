@@ -10,4 +10,5 @@ urlpatterns = [
     path('agregar-evento/', agregar_evento, name='agregar_evento'),
     path('api/eventos/', obtener_eventos, name='obtener_eventos'),
     path('eliminar-evento/', eliminar_evento, name='eliminar_evento'),
+    path('editar_evento/<int:event_id>/', editar_evento, name='editar_evento'),
 ]
