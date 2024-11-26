@@ -80,16 +80,70 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Editar evento');
             });
         
-            deleteButton.addEventListener('click', function() {
-                confirmDeleteButton.addEventListener('click', () => {
-                    confirmDeleteModal.style.display = 'none';
-                    // Aquí puedes agregar la lógica para eliminar el evento
-                    alert(info.event.title)
-                    alert(info.event.extendedProps.timeStart)
-                    alert(info.event.extendedProps.timeEnd)
-                    alert(info.event.extendedProps.location)
+            function convertirHoraA24Horas(hora) {
+                const [time, modifier] = hora.split(' ');
+                let [hours, minutes] = time.split(':');
+            
+                if (modifier === 'PM' && hours !== '12') {
+                    hours = parseInt(hours, 10) + 12;
+                } else if (modifier === 'AM' && hours === '12') {
+                    hours = '00';
+                }
+            
+                return `${hours}:${minutes}`;
+            }
+
+        deleteButton.addEventListener('click', function () {
+            confirmDeleteButton.addEventListener('click', () => {
+                confirmDeleteModal.style.display = 'none';
+
+                // Capturar la información del evento
+                const evento = {
+                    title: info.event.title,
+                    date: info.event.startStr.split("T")[0],
+                    timeStart: convertirHoraA24Horas(info.event.extendedProps.timeStart),
+                    timeEnd: convertirHoraA24Horas(info.event.extendedProps.timeEnd),
+                    location: info.event.extendedProps.location,
+                };
+
+                // Enviar la información al servidor
+                fetch('/eliminar-evento/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken') // Token CSRF para seguridad
+                    },
+                    body: JSON.stringify(evento)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.mensaje) {
+                        alert(data.mensaje);
+                    } else {
+                        alert('Error al eliminar el evento.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
             });
+        });
+
+        // Función para obtener el token CSRF
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === name + '=') {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
         },
 
         eventContent: function(arg) {

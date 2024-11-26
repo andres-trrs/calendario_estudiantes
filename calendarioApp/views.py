@@ -135,11 +135,39 @@ def editar_evento(request, event_id):
 
 
 
+@csrf_exempt  # O utiliza el token CSRF en el frontend
 def eliminar_evento(request):
-    # Verificamos si el usuario tiene una sesión activa
-    correo = request.session.get('correo')
-    if correo:
-        print(f"El correo que va a eliminar el evento es: {correo}")
-        return JsonResponse({"mensaje": "Evento eliminado correctamente", "correo": correo})
-    else:
-        return JsonResponse({"mensaje": "No hay usuario activo"}, status=403)
+    if request.method == "POST":
+        # Obtener el correo de la sesión
+        correo = request.session.get('correo')
+        if not correo:
+            return JsonResponse({"mensaje": "No hay usuario activo"}, status=403)
+
+        # Decodificar los datos enviados desde JavaScript
+        datos = json.loads(request.body)
+        titulo = datos.get('title')
+        fecha = datos.get('date')  # Fecha del evento
+        hora_inicio = datos.get('timeStart')
+        hora_fin = datos.get('timeEnd')
+        ubicacion = datos.get('location')
+
+        # Validar que los datos requeridos estén presentes
+        if not all([titulo, fecha, hora_inicio, hora_fin]):
+            return JsonResponse({"mensaje": "Datos incompletos para eliminar el evento"}, status=400)
+
+        # Buscar y eliminar el evento en la base de datos
+        try:
+            evento = Evento.objects.get(
+                titulo=titulo,
+                fecha=fecha,
+                hora_inicio=hora_inicio,
+                hora_fin=hora_fin,
+                ubicacion=ubicacion,
+                correo=correo,
+            )
+            evento.delete()
+            return JsonResponse({"mensaje": "Evento eliminado correctamente"})
+        except Evento.DoesNotExist:
+            return JsonResponse({"mensaje": "Evento no encontrado"}, status=404)
+
+    return JsonResponse({"mensaje": "Método no permitido"}, status=405)
