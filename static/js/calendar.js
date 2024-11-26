@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(data => {
                     if (data.mensaje) {
                         alert(data.mensaje);
+                        location.reload();
                     } else {
                         alert('Error al eliminar el evento.');
                     }
