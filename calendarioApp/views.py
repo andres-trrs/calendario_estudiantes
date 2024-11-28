@@ -5,6 +5,11 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Usuario, Evento
 from django.shortcuts import get_object_or_404
 import json
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.date import DateTrigger
+from datetime import datetime
+import smtplib
+from email.message import EmailMessage
 
 
 def muestrahome(request):
@@ -17,6 +22,9 @@ def muestrahome(request):
     return render(request, 'home.html')
 
 def login(request):
+    # Limpia los mensajes de la sesión antes de mostrar la vista de login
+    messages.get_messages(request).used = True
+
     if request.method == 'POST':
         correo = request.POST.get('correo')
         contrasena = request.POST.get('contrasena')
@@ -186,3 +194,205 @@ def eliminar_evento(request):
             return JsonResponse({"mensaje": "Evento no encontrado"}, status=404)
 
     return JsonResponse({"mensaje": "Método no permitido"}, status=405)
+
+
+
+
+
+# Crear un programador global
+scheduler = BackgroundScheduler()
+scheduler.start()
+
+def enviar_correo(remitente, correo, asunto, mensaje_html):
+    """Función para enviar correos electrónicos."""
+    try:
+        email = EmailMessage()
+        email["From"] = remitente
+        email["To"] = correo
+        email["Subject"] = asunto
+        email.add_alternative(mensaje_html, subtype="html")
+
+        # Enviar el correo utilizando el servidor SMTP de Gmail
+        smtp = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        smtp.login(remitente, "bkbh bhgt uawl aakf")  # Cambia por tu contraseña de aplicación
+        smtp.send_message(email)
+        smtp.quit()
+        print(f"Correo enviado exitosamente a {correo}.")
+    except Exception as e:
+        print(f"Error al enviar el correo: {e}")
+
+def agregar_evento(request):
+    if request.method == 'POST':
+        # Obtener los datos del formulario
+        titulo = request.POST.get('titulo')
+        fecha = request.POST.get('fecha')  # Fecha en formato 'YYYY-MM-DD'
+        hora_inicio = request.POST.get('hora_inicio')  # Hora en formato 'HH:MM'
+        hora_fin = request.POST.get('hora_fin')
+        ubicacion = request.POST.get('ubicacion')
+        correo = request.session.get('correo')
+
+        # Validación básica
+        if titulo and fecha and hora_inicio and hora_fin:
+            # Crear el evento
+            evento = Evento.objects.create(
+                titulo=titulo,
+                fecha=fecha,
+                hora_inicio=hora_inicio,
+                hora_fin=hora_fin,
+                ubicacion=ubicacion,
+                correo=correo
+            )
+
+            try:
+                # Datos del remitente y asunto
+                remitente = 'calendarioeventos75@gmail.com'
+                asunto_confirmacion = f"Confirmación de Evento: {titulo}"
+                asunto_recordatorio = f"Recordatorio de Evento: {titulo}"
+
+                # Contenido del correo de confirmación
+                mensaje_confirmacion = f"""
+               <html>
+                    <body style="background-image: url('https://www.oxfordcollegemitarende.it/wp-content/uploads/2022/10/Come-leggere-e-scrivere-le-date-in-inglese-Blog.jpg'); 
+                                background-size: cover; 
+                                background-repeat: no-repeat; 
+                                background-position: center; 
+                                padding: 20px; 
+                                font-family: Arial, sans-serif;">
+                        <div style="background-color: rgba(0, 0, 0, 0.7); /* Fondo negro con transparencia */
+                                    padding: 30px; 
+                                    border-radius: 15px; 
+                                    max-width: 600px; 
+                                    margin: 0 auto; 
+                                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <h2 style="text-align: center; color: #fff;">Confirmación de Evento</h2>
+                            <ul style="list-style: none; padding: 0; color: #fff;">
+                                <li><strong>Título:</strong> {titulo}</li>
+                                <li><strong>Fecha:</strong> {fecha}</li>
+                                <li><strong>Hora de Inicio:</strong> {hora_inicio}</li>
+                                <li><strong>Hora de Término:</strong> {hora_fin}</li>
+                                <li><strong>Ubicación:</strong> {ubicacion}</li>
+                            </ul>
+                            <h3 style="text-align: center; color: #fff;">¿Qué tan satisfecho estás con este sistema?</h3>
+                            <!-- Usamos una tabla para garantizar la alineación de las estrellas -->
+                            <table role="presentation" style="width: 100%; margin: 20px 0;">
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="1 estrella">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="1 estrella" width="30">
+                                        </button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="2 estrellas">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="2 estrellas" width="30">
+                                        </button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="3 estrellas">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="3 estrellas" width="30">
+                                        </button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="4 estrellas">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="4 estrellas" width="30">
+                                        </button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="5 estrellas">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="5 estrellas" width="30">
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <p style="text-align: center; color: #ccc; margin-top: 20px;">Gracias por usar nuestro sistema de eventos.</p>
+                        </div>
+                    </body>
+                </html>
+                """
+
+
+                # Contenido del correo de recordatorio
+                mensaje_recordatorio = f"""
+                <html>
+                    <body style="background-image: url('https://www.oxfordcollegemitarende.it/wp-content/uploads/2022/10/Come-leggere-e-scrivere-le-date-in-inglese-Blog.jpg'); 
+                                background-size: cover; 
+                                background-repeat: no-repeat; 
+                                background-position: center; 
+                                padding: 20px; 
+                                font-family: Arial, sans-serif;">
+                        <div style="background-color: rgba(0, 0, 0, 0.7); /* Fondo negro con transparencia */
+                                    padding: 30px; 
+                                    border-radius: 15px; 
+                                    max-width: 600px; 
+                                    margin: 0 auto; 
+                                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <h2 style="text-align: center; color: #333;">Recordatorio de Evento</h2>
+                            <ul style="list-style: none; padding: 0; color: #333;">
+                                <li><strong>Título:</strong> {titulo}</li>
+                                <li><strong>Fecha:</strong> {fecha}</li>
+                                <li><strong>Hora de Inicio:</strong> {hora_inicio}</li>
+                                <li><strong>Hora de Término:</strong> {hora_fin}</li>
+                                <li><strong>Ubicación:</strong> {ubicacion}</li>
+                            </ul>
+                            <h3 style="text-align: center; color: #555;">¿Qué tan satisfecho estás con este sistema?</h3>
+                            
+                            <!-- Usamos una tabla para garantizar la alineación de las estrellas -->
+                            <table role="presentation" style="width: 100%; margin: 20px 0;">
+                                <tr>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="1 estrella">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="1 estrella" width="30">
+                                        </button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="2 estrellas">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="2 estrellas" width="30">
+                                        </button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="3 estrellas">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="3 estrellas" width="30">
+                                        </button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="4 estrellas">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="4 estrellas" width="30">
+                                        </button>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <button style="background-color: transparent; border: none; cursor: pointer; outline: none;" title="5 estrellas">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/616/616489.png" alt="5 estrellas" width="30">
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="text-align: center; color: #777; margin-top: 20px;">Gracias por usar nuestro sistema de eventos.</p>
+                        </div>
+                    </body>
+                </html>
+                """
+
+                # Enviar el correo de confirmación inmediatamente
+                enviar_correo(remitente, correo, asunto_confirmacion, mensaje_confirmacion)
+
+                # Programar el recordatorio para la fecha y hora del evento
+                fecha_hora_envio = datetime.strptime(f"{fecha} {hora_inicio}", "%Y-%m-%d %H:%M")
+                scheduler.add_job(
+                    enviar_correo,
+                    trigger=DateTrigger(run_date=fecha_hora_envio),
+                    args=[remitente, correo, asunto_recordatorio, mensaje_recordatorio]
+                )
+
+                print(f"Recordatorio programado para {fecha_hora_envio}.")
+
+            except Exception as e:
+                print(f"Error al procesar el correo: {e}")
+
+            # Mensaje de éxito
+            
+            return redirect('home')
+        else:
+            messages.error(request, "Todos los campos son obligatorios.")
+            return redirect('home')
+
+    return render(request, 'home.html')
