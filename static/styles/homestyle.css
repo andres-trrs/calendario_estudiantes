@@ -723,7 +723,7 @@
 .delete-button:hover {
     background-color: #cc0000;
 }
-/* Estilo general del popup */
+/* Estilos generales del popup */
 .popup {
     display: none;
     position: fixed;
@@ -736,6 +736,7 @@
     justify-content: center;
     align-items: center;
 }
+  
 
 /* Mostrar el popup */
 .popup.show {
@@ -748,9 +749,21 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    width: 90%;
     max-width: 500px;
     animation: fadeIn 0.3s ease-in-out;
+}
+/* Popup de edición de evento específico */
+#editEventPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    max-width: 90%;
 }
 
 /* Títulos */
@@ -914,4 +927,18 @@
 #confirmDeleteModal button.cancel {
     background-color: #ccc;
     color: black;
+}
+button[type="submit"] {
+    background-color: green !important;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: darkgreen !important;
 }
